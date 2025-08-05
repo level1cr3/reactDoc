@@ -3,6 +3,7 @@ import styles from "./Game.module.css";
 import { useState } from "react";
 
 const Game = () => {
+  const [asc, setAsc] = useState(true);
   const [currentMove, setCurrentMove] = useState(0);
   const [history, setHistory] = useState<string[][]>([Array(9).fill(null)]); // default value is array with single item. which itself is array.
   const currentSquares = history[currentMove];
@@ -18,7 +19,7 @@ const Game = () => {
     setCurrentMove(nextMove);
   };
 
-  const moves = history.map((_, move) => {
+  let moves = history.map((_, move) => {
     const description = move > 0 ? `Go to move # ${move}` : `Go to game start`;
     const isCurrentMove = history.length - 1 === move;
     const moveControl = isCurrentMove ? (
@@ -32,8 +33,20 @@ const Game = () => {
     return <li key={move}>{moveControl}</li>;
   });
 
+  moves = asc ? moves : [...moves].reverse(); // don't do moves.reverse() this is not react way.
+
+  // React’s rendering works best when you treat all data as immutable — meaning you create new arrays/objects rather than changing them directly.
+
   return (
     <>
+      <button
+        onClick={() => {
+          setAsc(!asc);
+        }}
+      >
+        {asc ? "Ascending" : "Descending"}
+      </button>
+
       <div className={styles.game}>
         <div className="game-board">
           <Board
