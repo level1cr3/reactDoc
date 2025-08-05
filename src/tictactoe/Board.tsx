@@ -1,11 +1,13 @@
-import { useState } from "react";
 import styles from "./Game.module.css";
 import Square from "./Square";
 
-const Board = () => {
-  const [xIsNext, setXIsNext] = useState(true); // by default first move is X
-  const [squares, setSquares] = useState<string[]>(Array(9).fill(null));
+type Props = {
+  xIsNext: boolean;
+  squares: string[];
+  onPlay: (nextSquares: string[]) => void;
+};
 
+const Board = ({ xIsNext, squares, onPlay }: Props) => {
   const handleClick = (index: number) => {
     // this is closure in action. handle click has acess to outer variable and function. of Board. (squares, setSquares)
 
@@ -16,8 +18,7 @@ const Board = () => {
 
     const nextSquares = [...squares];
     nextSquares[index] = xIsNext ? "X" : "O";
-    setSquares(nextSquares);
-    setXIsNext(!xIsNext);
+    onPlay(nextSquares);
   };
 
   const winner = calculateWinner(squares);
@@ -35,7 +36,6 @@ const Board = () => {
 
       <div className={styles["board-row"]}>
         <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-
         <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
         <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
       </div>

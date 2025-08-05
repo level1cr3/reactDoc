@@ -1,10 +1,10 @@
 import "./App.css";
-import Board from "./tictactoe/Board";
+import Game from "./tictactoe/Game";
 
 function App() {
   return (
     <>
-      <Board />
+      <Game />
     </>
   );
 }
