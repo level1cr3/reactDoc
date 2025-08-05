@@ -19,12 +19,17 @@ const Game = () => {
   };
 
   const moves = history.map((_, move) => {
-    let description = move > 0 ? `Go to move # ${move}` : `Go to game start`;
-    return (
-      <li key={move} onClick={() => jumpTo(move)}>
+    const description = move > 0 ? `Go to move # ${move}` : `Go to game start`;
+    const isCurrentMove = history.length - 1 === move;
+    const moveControl = isCurrentMove ? (
+      <span>{description}</span>
+    ) : (
+      <button onClick={() => jumpTo(move)} style={{ marginBlockEnd: "10px" }}>
         {description}
-      </li>
+      </button>
     );
+
+    return <li key={move}>{moveControl}</li>;
   });
 
   return (
