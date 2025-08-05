@@ -5,11 +5,13 @@ import { useState } from "react";
 const Game = () => {
   const [asc, setAsc] = useState(true);
   const [currentMove, setCurrentMove] = useState(0);
-  const [history, setHistory] = useState<string[][]>([Array(9).fill(null)]); // default value is array with single item. which itself is array.
+  const [history, setHistory] = useState<(string | null)[][]>([
+    Array(9).fill(null),
+  ]); // default value is array with single item. which itself is array.
   const currentSquares = history[currentMove];
   const xIsNext = currentMove % 2 === 0;
 
-  const handlePlay = (nextSquares: string[]) => {
+  const handlePlay = (nextSquares: (string | null)[]) => {
     const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
     setHistory(nextHistory);
     setCurrentMove(nextHistory.length - 1);

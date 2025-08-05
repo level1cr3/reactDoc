@@ -3,8 +3,8 @@ import Square from "./Square";
 
 type Props = {
   xIsNext: boolean;
-  squares: string[];
-  onPlay: (nextSquares: string[]) => void;
+  squares: (string | null)[];
+  onPlay: (nextSquares: (string | null)[]) => void;
 };
 
 const Board = ({ xIsNext, squares, onPlay }: Props) => {
@@ -25,26 +25,29 @@ const Board = ({ xIsNext, squares, onPlay }: Props) => {
   let status;
 
   if (winner) {
-    status = `Winner : ${winner}`;
+    status = `Winner : ${winner.player}`;
   } else {
     status = `Next player : ${xIsNext ? "X" : "O"}`;
+    if (!squares.includes(null)) {
+      status = `Draw`;
+    }
   }
 
-  const squareElements = squares.map((square, index) => (
-    <Square
-      key={index}
-      value={square}
-      onSquareClick={() => handleClick(index)}
-    />
-  ));
+  // const squareElements = squares.map((square, index) => (
+  //   <Square
+  //     key={index}
+  //     value={square}
+  //     onSquareClick={() => handleClick(index)}
+  //   />
+  // ));
 
-  const elements = [0, 1, 2].map((_, index) => {
-    return (
-      <div key={index} className={styles["board-row"]}>
-        {squareElements.slice(index * 3, (index + 1) * 3)}
-      </div>
-    );
-  }); // for rendering square just render elements.
+  // const elements = [0, 1, 2].map((_, index) => {
+  //   return (
+  //     <div key={index} className={styles["board-row"]}>
+  //       {squareElements.slice(index * 3, (index + 1) * 3)}
+  //     </div>
+  //   );
+  // }); // for rendering square just render elements.
 
   return (
     <>
@@ -59,6 +62,7 @@ const Board = ({ xIsNext, squares, onPlay }: Props) => {
                 key={index}
                 value={squares[index]}
                 onSquareClick={() => handleClick(index)}
+                isHighlight={winner?.positions.includes(index) ?? false}
               ></Square>
             );
           })}
@@ -70,7 +74,12 @@ const Board = ({ xIsNext, squares, onPlay }: Props) => {
 
 //we can put method above or below main component : choosing below becausee i don't want to scroll past it everytime.
 
-function calculateWinner(squares: string[]) {
+type Winner = {
+  player: string | null;
+  positions: number[];
+};
+
+function calculateWinner(squares: (string | null)[]): Winner | null {
   // i will get all possible winner lines. and if any of these lines have same values that. value wins.
 
   const lines = [
@@ -93,7 +102,7 @@ function calculateWinner(squares: string[]) {
     const [a, b, c] = line;
 
     if (squares[a] && squares[a] === squares[b] && squares[b] === squares[c]) {
-      return squares[a];
+      return { player: squares[a], positions: line };
     }
   }
 
