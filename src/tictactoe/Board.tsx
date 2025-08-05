@@ -44,12 +44,26 @@ const Board = ({ xIsNext, squares, onPlay }: Props) => {
         {squareElements.slice(index * 3, (index + 1) * 3)}
       </div>
     );
-  });
+  }); // for rendering square just render elements.
 
   return (
     <>
       <div className={styles.status}>{status}</div>
-      {elements}
+
+      {[0, 1, 2].map((row) => (
+        <div key={row} className={styles["board-row"]}>
+          {[0, 1, 2].map((col) => {
+            const index = row * 3 + col;
+            return (
+              <Square
+                key={index}
+                value={squares[index]}
+                onSquareClick={() => handleClick(index)}
+              ></Square>
+            );
+          })}
+        </div>
+      ))}
     </>
   );
 };
