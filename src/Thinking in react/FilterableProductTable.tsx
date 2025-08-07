@@ -14,7 +14,6 @@ const FilterableProductTable = ({ products }: Products) => {
         inStockOnly={inStockOnly}
         onCheck={() => setInStockOnly(!inStockOnly)}
         onSearch={(value: string) => setFilterText(value)}
-        // onFilterTextChange={setFilterText}
       />
       <ProductTable
         products={products}

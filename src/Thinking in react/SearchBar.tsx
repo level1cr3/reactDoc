@@ -1,11 +1,8 @@
-import type { Dispatch, SetStateAction } from "react";
-
 type Props = {
   filterText: string;
   inStockOnly: boolean;
   onCheck: () => void;
   onSearch: (value: string) => void;
-  // onFilterTextChange: Dispatch<SetStateAction<string>>;
 };
 
 const Searchbar = ({ filterText, inStockOnly, onCheck, onSearch }: Props) => {
@@ -18,7 +15,6 @@ const Searchbar = ({ filterText, inStockOnly, onCheck, onSearch }: Props) => {
           style={{ paddingInline: 15, paddingBlock: 5 }}
           value={filterText}
           onChange={(e) => onSearch(e.target.value)}
-          // onChange={(e) => onFilterTextChange(e.target.value)}
         />
 
         <div
