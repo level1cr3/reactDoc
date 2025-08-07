@@ -1,10 +1,11 @@
 import "./App.css";
-import Game from "./tictactoe/Game";
+import FilterableProductTable from "./Thinking in react/FilterableProductTable";
+import products from "./Thinking in react/data/products";
 
 function App() {
   return (
     <>
-      <Game />
+      <FilterableProductTable products={products} />
     </>
   );
 }
