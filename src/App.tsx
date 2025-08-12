@@ -1,16 +1,18 @@
-import { useState } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import "./App.css";
-import MyCountContext from "./Propdrilling and Context/Context/MyCountContext";
-import PropDrilling from "./Propdrilling and Context/PropDrilling";
+import Count from "./Propdrilling and Context/challenge/Count";
+import CountButton from "./Propdrilling and Context/challenge/CountButton";
+import CountProvider from "./Propdrilling and Context/challenge/CountProvider";
 
 function App() {
-  const [count] = useState(77);
-
   return (
     <>
-      <MyCountContext.Provider value={count}>
-        <PropDrilling count={count} />
-      </MyCountContext.Provider>
+      <ErrorBoundary fallback={<div>Something went wrong</div>}>
+        <CountProvider>
+          <Count />
+          <CountButton />
+        </CountProvider>
+      </ErrorBoundary>
     </>
   );
 }
