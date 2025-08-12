@@ -1,11 +1,16 @@
+import { useState } from "react";
 import "./App.css";
-import FilterableProductTable from "./Thinking in react/FilterableProductTable";
-import products from "./Thinking in react/data/products";
+import MyCountContext from "./Propdrilling and Context/Context/MyCountContext";
+import PropDrilling from "./Propdrilling and Context/PropDrilling";
 
 function App() {
+  const [count] = useState(77);
+
   return (
     <>
-      <FilterableProductTable products={products} />
+      <MyCountContext.Provider value={count}>
+        <PropDrilling count={count} />
+      </MyCountContext.Provider>
     </>
   );
 }
