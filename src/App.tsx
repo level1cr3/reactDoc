@@ -1,18 +1,15 @@
-import { ErrorBoundary } from "react-error-boundary";
 import "./App.css";
-import Count from "./Propdrilling and Context/challenge/Count";
-import CountButton from "./Propdrilling and Context/challenge/CountButton";
-import CountProvider from "./Propdrilling and Context/challenge/CountProvider";
+import ErrorBoundry from "./Error Boundary/ErrorBoundry";
+import InsideErrorBoundry from "./Error Boundary/InsideErrorBoundry";
+import OutSideErrorBoundry from "./Error Boundary/OutSideErrorBoundry";
 
 function App() {
   return (
     <>
-      <ErrorBoundary fallback={<div>Something went wrong</div>}>
-        <CountProvider>
-          <Count />
-          <CountButton />
-        </CountProvider>
-      </ErrorBoundary>
+      <OutSideErrorBoundry />
+      <ErrorBoundry fallback={<h2> something went wrong.</h2>}>
+        <InsideErrorBoundry />
+      </ErrorBoundry>
     </>
   );
 }
