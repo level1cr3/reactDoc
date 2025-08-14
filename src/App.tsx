@@ -1,16 +1,16 @@
+import { useState } from "react";
 import "./App.css";
-import ErrorBoundry from "./Error Boundary/ErrorBoundry";
-import InsideErrorBoundry from "./Error Boundary/InsideErrorBoundry";
-import OutSideErrorBoundry from "./Error Boundary/OutSideErrorBoundry";
+import ArtistPage from "./Suspense/ArtistPage";
 
 function App() {
+  const [show, setShow] = useState(false);
+
+  if (show) {
+    return <ArtistPage name="The Beatles" slug="the-beatles" />;
+  }
+
   return (
-    <>
-      <OutSideErrorBoundry />
-      <ErrorBoundry fallback={<h2> something went wrong.</h2>}>
-        <InsideErrorBoundry />
-      </ErrorBoundry>
-    </>
+    <button onClick={() => setShow(!show)}>Open the beatles artist page</button>
   );
 }
 

@@ -1,0 +1,80 @@
+Alright, let’s slow it down and walk through **exactly** what happens under the hood.
+
+We’ll zoom in on just the key actors:
+
+* **Your component** (Albums)
+* **`getAlbums()`** (returns a Promise)
+* **React Suspense** (controls loading)
+* **`use()`** (waits for the Promise to resolve)
+
+---
+
+## 1️⃣ First render
+
+You wrote:
+
+```tsx
+const albums = use(getAlbums());
+```
+
+When React starts rendering **for the first time**:
+
+* `getAlbums()` is called → it creates a **brand-new Promise** and starts a 3-second timer.
+* `use()` sees this Promise is still pending → it says to React: “I can’t finish right now, throw me into Suspense.”
+* React *stops rendering Albums* and shows your Suspense fallback (loading spinner, etc.).
+* **React keeps that Promise around** and waits for it to settle.
+
+---
+
+## 2️⃣ Promise resolves
+
+After 3 seconds:
+
+* The Promise from step 1 resolves with your album array.
+* React says, “Okay, I can retry rendering that component now.”
+
+---
+
+## 3️⃣ React retries the render
+
+When React retries:
+
+* It starts **fresh** from the top of your component function.
+* That means it **calls `getAlbums()` again**.
+* And `getAlbums()` makes a **new Promise**, with a *new* 3-second timer.
+* `use()` sees *this* new Promise is pending → Suspends again.
+* Suspense fallback shows again.
+* React will now wait for this **new** Promise to resolve.
+
+---
+
+## 4️⃣ The cycle repeats forever
+
+Every retry creates a **new Promise** → `use()` suspends again → Suspense never gets past “loading.”
+
+---
+
+## 💡 Why caching fixes it
+
+If you do:
+
+```ts
+const albumsPromise = getAlbums(); // created once
+```
+
+Then on retries:
+
+* `use()` always gets the **same Promise object**.
+* On the first render, it’s pending → Suspense fallback shows.
+* When it resolves, React retries the render → calls `use()` with the **same Promise**, but this time it’s already resolved → `use()` just gives you the value → done.
+
+---
+
+### 🎯 The key rule:
+
+> With Suspense, you **must** give `use()` the *same* Promise instance across renders until it resolves.
+> If you give it a *new* Promise each time, you’re effectively telling React “still loading” forever.
+
+---
+
+If you want, I can make you a **step-by-step diagram** showing the timeline with and without caching, so you can literally see where React keeps replacing the Promise and why it gets stuck. That visual usually makes it click instantly.
